@@ -1,0 +1,13 @@
+# NodeJS
+node_modules
+
+# Logs
+npm-debug.log
+yarn-error.log
+
+# VS Code
+.vscode
+
+# Environment
+.env
+credentials.js
