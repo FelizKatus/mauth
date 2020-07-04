@@ -48,5 +48,5 @@ Login ->
 Mensajes flash ->
 ![Mensajes Flash](screenshots/login-flash-message.png "Mensajes flash")
 
-Admin ->
-![Admin](screenshots/admin.png "Admin")
+Perfil de usuario ->
+![Perfil de usuario](screenshots/user-profile.png "Perfil de usuario")
