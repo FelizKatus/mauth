@@ -7,6 +7,12 @@ Simple autorización de usuarios con MongoDB. Se desarrolla con las siguientes f
 * Handlebars
 * Tailwind
 
+#### De la caja:
+
+* Autorizacion basada en cookies
+* Mensajes flash
+* Validación de formularios del lado del cliente y del servidor
+
 #### Como arrancar
 
 <pre><code>
@@ -43,4 +49,4 @@ Mensajes flash ->
 ![Mensajes Flash](screenshots/login-flash-message.png "Mensajes flash")
 
 Admin ->
-![Admin](screenshots/Admin.png "Admin")
+![Admin](screenshots/admin.png "Admin")
