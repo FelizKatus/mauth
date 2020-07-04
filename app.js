@@ -33,6 +33,7 @@ switch (app.get('env')) {
 
 // Seeding
 
+// eslint-disable-next-line array-callback-return
 User.find((err, users) => {
   if (err) console.error(err)
   if (users.length) return
@@ -56,17 +57,24 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 app.use(bodyParser.urlencoded({ extended: false }))
 
-// Cookies
+// Cookies and Sessions
 
 app.use(require('cookie-parser')(credentials.cookieSecret))
+app.use(
+  require('express-session')({
+    resave: false,
+    saveUninitialized: false,
+    secret: credentials.cookieSecret
+  })
+)
 
 // Flash
 
-// app.use((req, res, next) => {
-//   res.locals.flash = req.session.flash
-//   delete req.session.flash
-//   next()
-// })
+app.use((req, res, next) => {
+  res.locals.flash = req.session.flash
+  delete req.session.flash
+  next()
+})
 
 // Routing
 
@@ -82,9 +90,19 @@ app.post('/', (req, res) => {
       if (loggingUser.password === existingUser.password) {
         res.cookie('logged_in', true, { signed: true, httpOnly: true })
         res.render('profile')
+      } else {
+        req.session.flash = {
+          intro: '¡Error de verificación!',
+          message: 'Contraseña incorrecta.'
+        }
+        res.redirect(303, '/')
       }
     } else {
-      res.send('User not found')
+      req.session.flash = {
+        intro: '¡Error de verificación!',
+        message: 'Usuario no encontrado.'
+      }
+      res.redirect(303, '/')
     }
   })
 })
@@ -93,7 +111,11 @@ app.get('/profile', (req, res) => {
   if (req.signedCookies.logged_in) {
     res.render('profile')
   } else {
-    res.send('Please, log in')
+    req.session.flash = {
+      intro: '¡Error de verificación!',
+      message: 'Por favor, inicia la sesión.'
+    }
+    res.redirect(303, '/')
   }
 })
 
@@ -101,13 +123,21 @@ app.get('/users', (req, res) => {
   if (req.signedCookies.logged_in) {
     res.render('users')
   } else {
-    res.send('Please, log in')
+    req.session.flash = {
+      intro: '¡Error de verificación!',
+      message: 'Por favor, inicia la sesión.'
+    }
+    res.redirect(303, '/')
   }
 })
 
 app.post('/logout', (req, res) => {
   res.clearCookie('logged_in')
-  res.send('Please, log in')
+  req.session.flash = {
+    intro: '¡Felicidades!',
+    message: 'Estás desconectado.'
+  }
+  res.redirect(303, '/')
 })
 
 app.listen(PORT, () => {
