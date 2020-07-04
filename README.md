@@ -38,3 +38,9 @@ Eres libre y tienes derecho de hacer todo lo que quieres.
 
 Login ->
 ![Login](screenshots/login.png "Login")
+
+Mensajes flash ->
+![Mensajes Flash](screenshots/login-flash-message.png "Mensajes flash")
+
+Admin ->
+![Admin](screenshots/Admin.png "Admin")
