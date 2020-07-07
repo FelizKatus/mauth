@@ -40,7 +40,7 @@ User.find((err, users) => {
 
   const user = new User
   user.email = 'felizkatus@gmail.com'
-  user.password = 'password'
+  user.password = Buffer.from('password').toString('base64')
   user.save()
 })
 
@@ -87,7 +87,7 @@ app.post('/', (req, res) => {
 
   User.findOne({ email: loggingUser.email }).then((existingUser) => {
     if (existingUser) {
-      if (loggingUser.password === existingUser.password) {
+      if (loggingUser.password === Buffer.from(existingUser.password, 'base64').toString('ascii')) {
         res.cookie('logged_in', true, { signed: true, httpOnly: true })
         res.render('profile')
       } else {

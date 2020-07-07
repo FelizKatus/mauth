@@ -12,6 +12,7 @@ Simple autorización de usuarios con MongoDB. Se desarrolla con las siguientes f
 * Autorizacion basada en cookies
 * Mensajes flash
 * Validación de formularios del lado del cliente y del servidor
+* Almacenamiento de contraseñas con cifrado (Base64)
 
 #### Como arrancar
 
