@@ -107,6 +107,12 @@ app.post('/', (req, res) => {
   })
 })
 
+app.get('/forgot', (req, res) => {
+  res.render('forgot', { layout: null })
+})
+
+app.post('/forgot', (req, res) => {})
+
 app.get('/profile', (req, res) => {
   if (req.signedCookies.logged_in) {
     res.render('profile')
