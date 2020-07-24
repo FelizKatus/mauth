@@ -10,9 +10,10 @@ Simple autorización de usuarios con MongoDB. Se desarrolla con las siguientes f
 #### De la caja:
 
 * Autorizacion basada en cookies
-* Mensajes flash
 * Validación de formularios del lado del cliente y del servidor
-* Almacenamiento de contraseñas con cifrado (Base64)
+* Mensajes flash
+* Almacenamiento de contraseña con cifrado (Base64)
+* Recuperación de contraseña con correo
 
 #### Como arrancar
 
@@ -26,6 +27,10 @@ Es necesario crear el fichero <code>credentials.js</code> con el siguiente conte
 <pre><code>
   module.exports = {
     cookieSecret: 'frase secreta',
+    gmail: {
+      user: 'su correo de Gmail',
+      password: 'su contraseña de Gmail'
+    }
     mongo: {
       development: {
         connectionString: 'mongodb://127.0.0.1/nombre_de_su_base_de_datos'
