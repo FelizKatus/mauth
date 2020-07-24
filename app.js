@@ -1,6 +1,7 @@
 const express = require('express')
 const path = require('path')
 const bodyParser = require('body-parser')
+const nodemailer = require('nodemailer')
 const handlebars = require('express-handlebars').create({ defaultLayout: 'main' })
 const mongoose = require('mongoose')
 
@@ -111,7 +112,58 @@ app.get('/forgot', (req, res) => {
   res.render('forgot', { layout: null })
 })
 
-app.post('/forgot', (req, res) => {})
+app.post('/forgot', (req, res) => {
+  const forgotUser = req.body
+  User.findOne({ email: forgotUser.email }).then((existingUser) => {
+    if (existingUser) {
+      const mailTransport = nodemailer.createTransport({
+        service: 'Gmail',
+        auth: {
+          user: credentials.gmail.user,
+          pass: credentials.gmail.password
+        }
+      })
+
+      const mailOptions = {
+        from: 'Login Form <do-not-reply@gmail.com>',
+        to: 'felizkatus@gmail.com',
+        subject: 'Forgotten password recovery',
+        html: `<p>Forgotten password recovery...</p>
+              <p><strong>Email:</strong>
+                ${existingUser.email}
+              </p>
+              <p><strong>Password:</strong>
+                ${Buffer.from(existingUser.password, 'base64').toString('ascii')}
+              </p>`,
+        generateTextFromHtml: true
+      }
+
+      mailTransport.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          req.session.flash = {
+            intro: 'Lo sentimos...',
+            message: 'El mensaje no se ha podido enviar.'
+          }
+          console.log(`Message could not be sent: ${error}`)
+          res.redirect('/')
+        } else {
+          req.session.flash = {
+            intro: '¡Gracias!',
+            message: 'El mensaje está enviado con éxito.'
+          }
+          console.log(`Message sent: ${info.response}`)
+          res.redirect('/')
+        }
+      })
+    } else {
+      req.session.flash = {
+        intro: '¡Error de verificación!',
+        message: 'Usuario no encontrado.'
+      }
+      res.redirect(303, '/forgot')
+    }
+  })
+})
 
 app.get('/profile', (req, res) => {
   if (req.signedCookies.logged_in) {
